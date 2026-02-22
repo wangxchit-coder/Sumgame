@@ -4,11 +4,12 @@ import { RotateCcw, Home, Skull } from 'lucide-react';
 
 interface GameOverProps {
   score: number;
+  reason?: string;
   onRestart: () => void;
   onHome: () => void;
 }
 
-export const GameOver: React.FC<GameOverProps> = ({ score, onRestart, onHome }) => {
+export const GameOver: React.FC<GameOverProps> = ({ score, reason, onRestart, onHome }) => {
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -25,7 +26,9 @@ export const GameOver: React.FC<GameOverProps> = ({ score, onRestart, onHome }) 
         </div>
         
         <h2 className="text-4xl font-bold mb-2 tracking-tight text-slate-900">游戏结束</h2>
-        <p className="text-slate-400 uppercase tracking-widest text-xs mb-8">方块已堆积至顶部</p>
+        <p className="text-slate-400 uppercase tracking-widest text-xs mb-8">
+          {reason || '方块已堆积至顶部'}
+        </p>
         
         <div className="mb-10">
           <span className="text-slate-400 text-sm block mb-1">最终得分</span>

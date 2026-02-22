@@ -20,7 +20,7 @@ export const NumberBlock: React.FC<NumberBlockProps> = ({ block, isSelected, onT
       whileTap={{ scale: 0.95 }}
       onClick={() => onToggle(block.id)}
       className={`
-        w-full aspect-square rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-200
+        w-full aspect-square rounded-lg flex items-center justify-center text-base font-bold transition-all duration-200
         ${isSelected 
           ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
           : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-sm'}

@@ -29,7 +29,7 @@ export const GameHeader: React.FC<GameHeaderProps> = ({ target, score, timeLeft,
         )}
       </div>
 
-      <div className="glass-panel p-6 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="glass-panel p-3 flex flex-col items-center justify-center relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-slate-100">
           {mode === GameMode.TIME && timeLeft !== undefined && (
             <motion.div 
@@ -41,15 +41,15 @@ export const GameHeader: React.FC<GameHeaderProps> = ({ target, score, timeLeft,
           )}
         </div>
         
-        <div className="flex items-center gap-3 mb-1">
-          <Target className="w-4 h-4 text-slate-400" />
-          <span className="text-xs uppercase tracking-widest text-slate-400 font-semibold">目标和</span>
+        <div className="flex items-center gap-2 mb-0.5">
+          <Target className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">目标和</span>
         </div>
         <motion.div 
           key={target}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-6xl font-bold font-mono tracking-tighter text-slate-900"
+          className="text-4xl font-bold font-mono tracking-tighter text-slate-900"
         >
           {target}
         </motion.div>

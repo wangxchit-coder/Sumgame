@@ -12,8 +12,28 @@ export const useGameLogic = (mode: GameMode | null) => {
   const [score, setScore] = useState(0);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [gameOverReason, setGameOverReason] = useState<string | undefined>(undefined);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
+  const [history, setHistory] = useState<{ grid: Block[][], target: number, score: number }[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const saveHistory = useCallback(() => {
+    setHistory(prev => {
+      const newState = { grid: JSON.parse(JSON.stringify(grid)), target, score };
+      return [newState, ...prev].slice(0, 10); // Keep last 10 moves
+    });
+  }, [grid, target, score]);
+
+  const undo = () => {
+    if (history.length === 0 || isGameOver) return;
+    const lastState = history[0];
+    setGrid(lastState.grid);
+    setTarget(lastState.target);
+    setScore(lastState.score);
+    setSelectedIds([]);
+    setHistory(prev => prev.slice(1));
+    if (mode === GameMode.TIME) setTimeLeft(TIME_LIMIT);
+  };
 
   const generateTarget = useCallback(() => {
     setTarget(Math.floor(Math.random() * (MAX_TARGET - MIN_TARGET + 1)) + MIN_TARGET);
@@ -24,6 +44,7 @@ export const useGameLogic = (mode: GameMode | null) => {
       // Check if the top row (index 0) has any blocks
       if (prev.length > 0 && prev[0].some(b => b !== null)) {
         setIsGameOver(true);
+        setGameOverReason('方块已堆积至顶部');
         return prev;
       }
 
@@ -66,7 +87,9 @@ export const useGameLogic = (mode: GameMode | null) => {
     setGrid(initialGrid);
     setScore(0);
     setSelectedIds([]);
+    setHistory([]);
     setIsGameOver(false);
+    setGameOverReason(undefined);
     setTimeLeft(TIME_LIMIT);
     generateTarget();
   }, [generateTarget]);
@@ -83,8 +106,9 @@ export const useGameLogic = (mode: GameMode | null) => {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            addNewRow();
-            return TIME_LIMIT;
+            setIsGameOver(true);
+            setGameOverReason('时间已耗尽');
+            return 0;
           }
           return prev - 1;
         });
@@ -93,7 +117,7 @@ export const useGameLogic = (mode: GameMode | null) => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [mode, isGameOver, addNewRow]);
+  }, [mode, isGameOver]);
 
   const toggleSelect = (id: string) => {
     if (isGameOver) return;
@@ -122,6 +146,7 @@ export const useGameLogic = (mode: GameMode | null) => {
   };
 
   const handleSuccess = (ids: string[]) => {
+    saveHistory();
     setScore(prev => prev + ids.length * 10);
     
     setGrid(prev => {
@@ -147,8 +172,11 @@ export const useGameLogic = (mode: GameMode | null) => {
     score,
     selectedIds,
     isGameOver,
+    gameOverReason,
     timeLeft,
+    canUndo: history.length > 0,
     toggleSelect,
+    undo,
     initGame
   };
 };

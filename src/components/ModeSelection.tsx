@@ -33,7 +33,7 @@ export const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelect }) => {
         />
         <ModeCard 
           title="计时模式" 
-          description="与时间赛跑。如果在规定时间内未完成消除，将自动新增一行。"
+          description="与时间赛跑。如果在规定时间内未完成消除，游戏将直接结束。"
           icon={<Timer className="w-6 h-6" />}
           onClick={() => onSelect(GameMode.TIME)}
           color="blue"
