@@ -1,0 +1,5 @@
+{
+  "name": "数字消除大挑战 (SumStack)",
+  "description": "一款策略性数字求和消除游戏。凑齐目标数字以消除方块，防止它们堆积到顶部。",
+  "requestFramePermissions": []
+}
